@@ -5,7 +5,7 @@ function Get-JiraData {
 
     Import-Module JiraPS
 
-    Set-JiraConfigServer 'https://jira.megafon.ru'
+    Set-JiraConfigServer 'https://jira..ru'
 
     $global:table = New-Object system.Data.DataTable "Задачи в Jira АРМ"
 
@@ -23,16 +23,7 @@ function Get-JiraData {
 
     $Credential = Get-Credential -Message "Введите имя учетной записи БЕЗ указания домена" -UserName $env:USERNAME
     
-    @("alexander.alpatov",
-    "alexander.se.borisov",
-    "ilya.teterin",
-    "Vadim.Zhirov",
-    "Artem.Sadovsky",
-    "Yuri.Tsvetkov",
-    "alexey.koshelev",
-    "evgeny.rzhavin",
-    "maxim.kabanov",
-    "alexey.grebenuk") | %{
+    @("") | %{
 
         $Username = $_
 
