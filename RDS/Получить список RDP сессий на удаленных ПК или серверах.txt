@@ -1,0 +1,15 @@
+﻿
+$servers = @(localhost)
+
+$session = New-PSSession -ComputerName $servers
+
+$scriptblock = { 
+    Write $env:COMPUTERNAME
+    qwinsta | foreach {$_.trim() -replace "\s+",","} | ConvertFrom-Csv | Select *,@{n="Server";e={$server}} | ft 
+}
+
+$result = Invoke-Command -Session $session -ScriptBlock $scriptblock
+
+Get-PSSession  | Remove-PSSession
+
+$result 

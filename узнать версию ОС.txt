@@ -1,0 +1,1 @@
+$($(systeminfo | Select-String "Название ОС:") -split "                      ")[1]

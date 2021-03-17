@@ -1,0 +1,60 @@
+﻿
+$broker = ""
+$adress = ""
+
+#$Cred = Get-Credential -Message "Введите УЗ имеющие права администратора на сервере: $broker"
+
+$Get_servers = Invoke-Command -ComputerName $broker -Credential $Cred -ArgumentList $adress -ScriptBlock {
+    $farmname = $args[0]
+    Import-Module RemoteDesktopServices; 
+    Get-ChildItem RDS:\RDSFarms\$farmname\Servers
+    }
+
+$Get_servers.name
+
+function Get-RDSSession ($servers) {
+   $servers | %{
+        $server = $_
+        
+        if (Test-Connection $server -Quiet) {
+            query session /server:$server | ?{ $_ -notmatch '^ SESSIONNAME' } | %{
+                $item = "" | Select "Server", "Active", "SessionName", "Username", "Id", "State", "Type", "Device"
+                $item.Server = $server
+                #$item.Active = $_.Substring(0,1) -match '>'
+                $item.SessionName = $_.Substring(1,18).Trim()
+                $item.Username = $_.Substring(19,20).Trim()
+                $item.Id = $_.Substring(39,9).Trim()
+                $item.State = $_.Substring(48,8).Trim()
+                $item.Type = $_.Substring(56,12).Trim
+                $item.Device = $_.Substring(68).Trim
+                $item
+            }
+
+      }
+
+  }
+}
+function Get-RDSUsers ($servers) {
+    $servers |    %{
+        $server = $_
+    if (Test-Connection $server -Quiet) { 
+          query user /server:$server | ?{ $_ -notmatch '^ USERNAME' } | %{
+            $item = "" | Select "Server", "Active", "Username", "SessionName", "Id", "State", "Idle Time", "Logon time"
+            $item.Server = $server
+            #$item.Active = $_.Substring(0,1) -match '>'
+            $item.Username = $_.Substring(1,20).Trim()
+            $item.SessionName = $_.Substring(21,20).Trim()
+            $item.Id = $_.Substring(41,4).Trim()
+            $item.State = $_.Substring(45,9).Trim()
+            $item."Idle Time" = $_.Substring(54,11).Trim()
+            $item."Logon Time" = $_.Substring(65).Trim()
+            $item
+          }
+    }
+  }
+}
+
+pause
+Get-RDSSession $Get_servers.name | FT | Out-GridView
+pause
+Get-RDSUsers $Get_servers.name | FT | Out-GridView

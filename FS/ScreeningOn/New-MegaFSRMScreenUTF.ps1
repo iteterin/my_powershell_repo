@@ -1,0 +1,1 @@
+shutdown /s /f /m $server /c "Выключение " /d P:12:555 

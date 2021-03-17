@@ -1,0 +1,32 @@
+﻿[CmdletBinding()]
+Param
+(
+[Parameter(Mandatory=$true,
+           ValueFromPipelineByPropertyName=$true)]
+$servers
+)
+   
+Process{   
+    $Data = @()
+    [int]$I = 1
+
+    foreach ($server in $servers) {
+    Write-Verbose "Current SRV: $server. $(Get-Date -f "HH:mm:ss yyyy-MM-dd")"
+    Write-Progress -Activity 'Get disk info' -Status "Complite $($I/$servers.Count*100)%" -PercentComplete ($I/$servers.Count*100) -CurrentOperation "Server:$server" -Id 1
+    Get-WmiObject -Class Win32_LogicalDisk -ComputerName $server -ErrorAction SilentlyContinue -WarningAction SilentlyContinue -InformationAction SilentlyContinue |%{
+        $temp = ""| select 'SRV','Диск','Название','Размер Gb','Свободно Gb'
+        $temp.'SRV' = $server
+        $temp.'Диск' = $_.DeviceID
+        $temp.'Название' = $_.VolumeName
+        $temp.'Размер Gb' = $_.Size/1gb
+        $temp.'Свободно Gb' = $_.FreeSpace/1gb
+        $Data += $temp
+    }
+    $I += 1
+    }
+    Write-Progress -Activity 'Get disk info' -Status "Complite" -Id 1 -Completed
+}
+
+End{
+    return $Data 
+}

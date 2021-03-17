@@ -1,0 +1,18 @@
+﻿Get-Content "C:\TEMP\RDS\rds-list.txt" |
+    %{
+        $server = $_
+    if (Test-Connection $server -Quiet) {
+          query user /server:$server | ?{ $_ -notmatch '^ USERNAME' } | %{
+            $item = "" | Select "Server", "Active", "Username", "SessionName", "Id", "State", "Idle Time", "Logon time"
+            $item.Server = $server
+            #$item.Active = $_.Substring(0,1) -match '>'
+            $item.Username = $_.Substring(1,20).Trim()
+            $item.SessionName = $_.Substring(21,20).Trim()
+            $item.Id = $_.Substring(41,4).Trim()
+            $item.State = $_.Substring(45,9).Trim()
+            $item."Idle Time" = $_.Substring(54,11).Trim()
+            $item."Logon Time" = $_.Substring(65).Trim()
+            $item
+          }
+    }
+    } | Format-Table -AutoSize -Wrap
