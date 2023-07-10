@@ -1,26 +1,4 @@
-﻿$servers = @('url-file-prof01.megafon.ru',
- 'url-dfs-fr01.megafon.ru',
- 'url-file-dfs03.megafon.ru',
- 'url-file-dfs01.megafon.ru',
- 'url-dml-dfs.megafon.ru',
- 'url-file-dfs02.megafon.ru',
- 'url-vmware-vrm.megafon.ru',
- 'url-dfs-fs01.megafon.ru',
- 'url-dfs-fr04.megafon.ru',
- 'url-dfs-fr03.megafon.ru',
- 'url-dfs-fr02.megafon.ru',
- 'url-xa-ps02.megafon.ru',
- 'url-xa-ps01.megafon.ru',
- 'url-xa-ps06.megafon.ru',
- 'url-xa-ps05.megafon.ru',
- 'url-xa-ps03.megafon.ru',
- 'url-xa-ps04.megafon.ru',
- 'url-dfs-upm02.megafon.ru',
- 'url-dfs-upm01.megafon.ru',
- 'url-appo-pub02.megafon.ru',
- 'url-appo-pub01.megafon.ru',
- 'url-appo-pvs02.megafon.ru',
- 'url-appo-pvs01.megafon.ru')
+﻿$servers = @()
 
 $Credential = Get-Credential
  $Session = New-PSSession $servers -Credential $Credential 
