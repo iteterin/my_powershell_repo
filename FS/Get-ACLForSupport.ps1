@@ -11,9 +11,9 @@ Process
    $Paths |%{
         $Path = $_
         Write-Verbose $Path
-        (Get-Acl -Path $Path).Access | Where-Object {$_.IdentityReference -match "MEGAFON"}|%{
+        (Get-Acl -Path $Path).Access | Where-Object {$_.IdentityReference -match "$env:USERDOMAIN"}|%{
             Write-Verbose $_
-            Get-ADGroup -Identity $($_.IdentityReference -replace "MEGAFON\\") -Properties Description, info | Select Name,Description,DistinguishedName,info| %{
+            Get-ADGroup -Identity $($_.IdentityReference -replace "$env:USERDOMAIN\\") -Properties Description, info | Select Name,Description,DistinguishedName,info| %{
                 Write-Verbose $_
                 $data_AD = $_
                 $Data_TMP = "" | Select Name,Description,DistinguishedName,info
