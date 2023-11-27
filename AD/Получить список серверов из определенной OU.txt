@@ -1,1 +1,2 @@
 Get-ADComputer -Filter * -SearchBase "" | Where-Object { $_ -match "servername" }
+Get-ADComputer -Filter { Name -like "" }} -SearchBase "" | Where-Object { $_ -match "servername" }
