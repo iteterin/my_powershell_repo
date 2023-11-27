@@ -13,7 +13,7 @@ $SRC.Source | %{
         $DataTemp.FileSystemRights = $_.FileSystemRights
         $DataTemp.AccessControlType = $_.AccessControlType
         $DataArr += $DataTemp
-        #Get-ADGroup -Identity $($_.IdentityReference -replace "MEGAFON\\") -Properties Description | Select Name,Description,DistinguishedName | FL
+        #Get-ADGroup -Identity $($_.IdentityReference -replace "$env:USERDOMAIN\\") -Properties Description | Select Name,Description,DistinguishedName | FL
     }
    
 }
