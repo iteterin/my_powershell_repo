@@ -1,5 +1,5 @@
 
-$auditPath = "\\megafon.ru\netlogon\"
+$auditPath = "somepath"
 
 Get-ChildItem -Path $auditPath -Force | ?{ $_.PSIsContainer } | %{
 
